@@ -1,0 +1,380 @@
+/*
+ * -----------------------------------------------------------
+ * GLOBAL & ANIMATED BACKGROUND
+ * -----------------------------------------------------------
+ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+:root {
+    --primary-color: #4CAF50; /* Green */
+    --secondary-color: #1a73e8; /* Blue */
+    --background-start: #5b769f; /* Light background */
+    --background-end: #2e75e8; /* Slightly darker background */
+    --card-bg-light: rgba(23, 121, 74, 0.75); /* Less transparent glass base */
+    --card-bg-dark: rgba(166, 150, 171, 0.98);
+    /* Multi-layered shadow for 3D depth and lift */
+    --shadow-3d: 
+        0 4px 6px rgba(0, 0, 0, 0.1),  /* Inner soft shadow */
+        0 10px 20px rgba(0, 0, 0, 0.15), /* Outer defined shadow */
+        0 0 0 1px rgba(255, 255, 255, 0.8); /* Highlight/border for lift */
+    --shadow-3d-hover: 
+        0 8px 12px rgba(0, 0, 0, 0.2), 
+        0 20px 40px rgba(0, 0, 0, 0.3);
+
+    /* NEW: Login specific colors */
+    --login-card-bg: rgba(230, 217, 217, 0.7); /* Darker background for login */
+    --login-input-bg: rgba(28, 64, 165, 0.15); /* Transparent input for dark card */
+    --login-input-border: rgba(255, 255, 255, 0.4);
+    --login-text-color: #f8f9fa; /* Light text for dark card */
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    /* Animated Gradient Background */
+    background: linear-gradient(-45deg, var(--background-start), var(--background-end), #d9e1e2, #c7d2d3);
+    background-size: 400% 400%;
+    animation: gradientAnimation 20s ease infinite;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+@keyframes gradientAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* New: Fade-in and Slide-up animation for main content */
+@keyframes fadeInSlide {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animated-entry {
+    animation: fadeInSlide 0.8s ease-out both;
+}
+
+/* -----------------------------------------------------------
+ * RESPONSIVE LAYOUT (Equal Height/Width)
+ * -----------------------------------------------------------
+ */
+.dashboard-grid {
+    /* Desktop: Two equal-width columns, centered */
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 30px;
+    max-width: 1400px;
+    margin: 40px auto;
+    align-items: stretch; /* Ensures equal height for children */
+}
+
+/* Mobile: Collapse to a single column */
+@media (max-width: 992px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        margin: 20px auto;
+    }
+}
+
+/* Card and Glass-Card styles (Dashboard/Analysis) */
+.card, .glass-card { /* General glass card for dashboard/analysis */
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    border-radius: 20px;
+    
+    /* Enhanced 3D Glassmorphism Effect */
+    background: var(--card-bg-light);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: var(--shadow-3d);
+
+    transition: transform 0.4s ease, box-shadow 0.4s ease, background 0.4s ease;
+}
+
+.card:hover, .glass-card:hover {
+    transform: translateY(-8px); /* More pronounced lift */
+    background: var(--card-bg-dark); /* Slightly less transparent on hover */
+    box-shadow: var(--shadow-3d-hover);
+}
+
+/* Stagger the entry animation for better effect on the dashboard */
+#add-student { animation-delay: 0.1s; }
+#take-attendance { animation-delay: 0.3s; }
+.login-form-container { animation-delay: 0.1s; }
+
+
+/* -----------------------------------------------------------
+ * TYPOGRAPHY & CONTRAST FIXES
+ * -----------------------------------------------------------
+ */
+
+/* Global fix for dark body background: force non-card text to white */
+body.bg-dark h1, body.bg-dark .text-light, #report-header {
+    color: white !important;
+}
+
+/* Inside the light glass cards, text must be dark for contrast */
+.card h2, .glass-card h2 {
+    font-size: 1.8rem;
+    color: #d4cdcd !important; 
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.card label, .glass-card label, .card p, .glass-card p, .modal-body p, .modal-body label {
+    color: #555 !important;
+    font-weight: 500;
+}
+
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+/* -----------------------------------------------------------
+ * INPUTS
+ * -----------------------------------------------------------
+ */
+.glass-input, .form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.4); /* More transparent input base */
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+.glass-input:focus, .form-control:focus {
+    outline: none;
+    background: var(--card-bg-dark);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.4); /* Stronger focus shadow */
+}
+
+/* -----------------------------------------------------------
+ * BUTTONS (Animated)
+ * -----------------------------------------------------------
+ */
+.btn-primary, .btn-secondary, #mark-btn, .animated-button {
+    display: inline-block;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.btn-primary, #mark-btn {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover, #mark-btn:hover {
+    background-color: #43a047; /* Darker green */
+    transform: scale(1.03); /* Subtle pop effect */
+    box-shadow: 0 6px 15px rgba(76, 175, 80, 0.4);
+}
+
+.btn-secondary, .btn-info {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.btn-secondary:hover, .btn-info:hover {
+    background-color: #1565c0; /* Darker blue */
+    transform: scale(1.03);
+    box-shadow: 0 6px 15px rgba(26, 115, 232, 0.4);
+}
+
+/* -----------------------------------------------------------
+ * ATTENDANCE TABLE & RESPONSIVE FIXES
+ * -----------------------------------------------------------
+ */
+.attendance-section {
+    flex-grow: 1; 
+    overflow-y: auto;
+    padding-bottom: 20px;
+}
+
+.attendance-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.attendance-table th, .attendance-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.attendance-table th {
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+}
+
+/* FIX: Decrease Present/Absent Dropdown Width (Request #2) */
+.attendance-status-select {
+    /* Updated to use min-width for flexibility but ensuring enough space, and max-width to constrain it */
+    min-width: 120px; 
+    max-width: 150px; 
+    padding: 5px;
+    font-size: 0.9rem;
+    text-align: center;
+    /* Ensure the select element itself doesn't shrink unnecessarily */
+    width: 100%; 
+}
+
+@media (max-width: 600px) {
+    .attendance-status-select {
+        /* On small screens, let it take up to 100% of the cell, but the cell itself should adjust */
+        width: 100%; 
+        max-width: none;
+    }
+}
+
+/* Analysis Page Table Styling */
+.glass-table {
+    background: rgba(255, 255, 255, 0.1); 
+    border-radius: 10px;
+    color: #fff; /* White text for contrast against dark body */
+}
+
+.glass-table thead th {
+    background-color: rgba(76, 175, 80, 0.8); 
+    color: white;
+}
+
+.glass-table tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.15); 
+}
+
+/* Status Messages */
+#add-status, #mark-status, #login-status {
+    margin-top: 10px;
+    font-weight: 600;
+    color: var(--login-text-color) !important; /* Default for login status */
+}
+
+/* Modal Styling (for Analysis) */
+.modal-content {
+    border-radius: 15px;
+    /* Apply glassmorphism to modal content */
+    background: var(--card-bg-light);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-3d-hover);
+}
+
+.modal-header {
+    border-bottom: none;
+}
+
+.btn-close.btn-close-white {
+    filter: invert(1);
+}
+
+/* -----------------------------------------------------------
+ * LOGIN PAGE SPECIFIC STYLES
+ * -----------------------------------------------------------
+ */
+.login-card {
+    width: 400px;
+    padding: 40px;
+    border-radius: 20px;
+    background: var(--login-card-bg); /* Use the new darker login card background */
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    color: var(--login-text-color); /* Ensure text is light */
+}
+
+.login-card .card-title {
+    color: var(--login-text-color) !important;
+    margin-bottom: 25px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    padding-bottom: 15px;
+}
+
+.login-card label {
+    color: var(--login-text-color) !important;
+    font-weight: 400;
+    text-align: left;
+    display: block;
+}
+
+.login-card .glass-input {
+    background: var(--login-input-bg);
+    border: 1px solid var(--login-input-border);
+    color: var(--login-text-color);
+}
+
+.login-card .glass-input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.login-card .glass-input:focus {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.5);
+}
+
+.login-card .btn-success {
+    background-color: var(--primary-color);
+    color: white;
+    width: 100%;
+    margin-top: 25px;
+}
+
+.login-card .btn-success:hover {
+    background-color: #43a047;
+    transform: scale(1.03);
+    box-shadow: 0 6px 15px rgba(76, 175, 80, 0.4);
+}
+
+/* Login Icon Styling */
+.login-icon {
+    width: 80px; /* Adjust size as needed */
+    height: 80px;
+    margin-bottom: 20px;
+    /* Basic styling to center and make it appealing */
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (max-width: 576px) {
+    .login-card {
+        width: 90%;
+        padding: 25px;
+    }
+}
